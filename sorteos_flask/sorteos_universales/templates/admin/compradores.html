@@ -1,0 +1,52 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Compradores — {{ evt.title }}{% endblock %}
+{% block admin_content %}
+
+<div class="flex items-center gap-3 mb-6 flex-wrap">
+  <a href="{{ url_for('admin_eventos') }}" style="color:var(--cyan);font-size:.85rem;">← Volver</a>
+  <h1 style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.1rem;color:#c4b5fd;">🎫 Compradores: {{ evt.title[:40] }}</h1>
+</div>
+
+{% if result %}
+<div class="winner-banner mb-6">
+  <div style="font-size:2rem;margin-bottom:.25rem;">🏆</div>
+  <h2 style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.1rem;color:var(--gold);margin-bottom:.25rem;">Ganador del Sorteo</h2>
+  <p style="color:#fde68a;font-size:1rem;font-weight:700;">{{ result.winner_name }}</p>
+  <p style="color:var(--mist);">Boleto #{{ "%03d"|format(result.winner_ticket_number) }} · {{ result.winner_email }}</p>
+  <p style="color:var(--mist);font-size:.78rem;">Sorteo: {{ result.decided_at.strftime('%d/%m/%Y %H:%M') }}</p>
+</div>
+{% endif %}
+
+<div class="flex justify-between items-center mb-3 flex-wrap gap-2">
+  <p style="color:var(--mist);font-size:.88rem;"><strong style="color:var(--text);">{{ tickets|length }}</strong> boleto(s) vendido(s) de {{ evt.total_tickets }} · Recaudado: <strong style="color:var(--cyan);">${{ "%.2f"|format(tickets|length * evt.ticket_price) }} USD</strong></p>
+  {% if evt.status == 'active' and tickets and not result %}
+  <form method="POST" action="{{ url_for('admin_sorteo', event_id=evt.id) }}" onsubmit="return confirm('¿Realizar el sorteo? Irreversible.');">
+    <button type="submit" class="btn btn-gold btn-sm">🎲 Realizar Sorteo Ahora</button>
+  </form>
+  {% endif %}
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>#Boleto</th><th>Comprador</th><th>Email</th><th>Teléfono</th><th>Referencia Pago</th><th>Fecha Compra</th></tr></thead>
+    <tbody>
+      {% for t in tickets %}
+      <tr {% if result and t.ticket_number == result.winner_ticket_number %}style="background:rgba(245,158,11,.08);"{% endif %}>
+        <td style="font-family:'Space Mono',monospace;color:{% if result and t.ticket_number == result.winner_ticket_number %}var(--gold){% else %}var(--cyan){% endif %};">
+          #{{ "%03d"|format(t.ticket_number) }}
+          {% if result and t.ticket_number == result.winner_ticket_number %} 🏆{% endif %}
+        </td>
+        <td><strong style="color:var(--text);">{{ t.buyer_name }}</strong></td>
+        <td style="color:var(--mist);font-size:.82rem;">{{ t.buyer_email }}</td>
+        <td style="color:var(--mist);font-size:.82rem;">{{ t.buyer_phone or '—' }}</td>
+        <td style="color:var(--mist);font-size:.82rem;">{{ t.pay_ref or '—' }}</td>
+        <td style="color:var(--mist);font-size:.78rem;">{{ t.purchased_at.strftime('%d/%m/%Y %H:%M') }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" style="text-align:center;color:var(--mist);padding:2rem;">Sin compradores aún.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Registro — Sorteos Universales{% endblock %}
+{% block content %}
+<div style="max-width:440px;margin:4rem auto;">
+  <div class="text-center mb-8">
+    <h1 style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.3rem;background:linear-gradient(90deg,#a78bfa,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Crear Cuenta</h1>
+    <p style="color:var(--mist);font-size:.88rem;margin-top:.5rem;">Únete al universo de los sorteos</p>
+  </div>
+  <div class="card p-6">
+    <form method="POST" style="display:flex;flex-direction:column;gap:1rem;">
+      <div class="form-group">
+        <label class="form-label">Nombre Completo *</label>
+        <input class="form-control" type="text" name="name" placeholder="Tu nombre completo" required autofocus/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Correo Electrónico *</label>
+        <input class="form-control" type="email" name="email" placeholder="correo@ejemplo.com" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña * <span style="font-size:.72rem;color:var(--mist);">(mín. 6 caracteres)</span></label>
+        <input class="form-control" type="password" name="password" placeholder="••••••••" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Teléfono</label>
+        <input class="form-control" type="tel" name="phone" placeholder="+591 70000000"/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:.5rem;">Crear Cuenta →</button>
+    </form>
+    <div class="divider" style="margin:1.25rem 0;"></div>
+    <p style="text-align:center;font-size:.85rem;color:var(--mist);">¿Ya tienes cuenta? <a href="{{ url_for('login') }}" style="color:var(--cyan);font-weight:600;">Iniciar Sesión</a></p>
+  </div>
+</div>
+{% endblock %}
