@@ -1,0 +1,74 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Almacén de Archivos — Admin{% endblock %}
+{% block admin_content %}
+
+<h1 style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.2rem;color:#c4b5fd;margin-bottom:1.5rem;">🗄 Almacén de Archivos</h1>
+
+<!-- UPLOAD FORM -->
+<div class="card p-6 mb-6" style="max-width:550px;">
+  <h3 style="font-family:'Orbitron',sans-serif;font-size:.85rem;color:#a78bfa;margin-bottom:1rem;">Subir nuevo archivo</h3>
+  <form method="POST" action="{{ url_for('admin_upload_nuevo') }}" enctype="multipart/form-data" style="display:flex;flex-direction:column;gap:.85rem;">
+    <div class="form-group">
+      <label class="form-label">Categoría</label>
+      <select class="form-control" name="subfolder">
+        <option value="events">Imágenes de Eventos</option>
+        <option value="prizes">Imágenes de Premios</option>
+        <option value="qr">Códigos QR</option>
+        <option value="gallery">Galería</option>
+        <option value="videos">Videos</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Archivo</label>
+      <input class="form-control" type="file" name="file" accept="image/*,video/mp4,video/webm" required/>
+      <span class="form-hint">Imágenes: PNG, JPG, WEBP, GIF. Videos: MP4, WEBM. Máx 50 MB.</span>
+    </div>
+    <button type="submit" class="btn btn-primary">📤 Subir Archivo</button>
+  </form>
+</div>
+
+<!-- FILES BY CATEGORY -->
+{% for cat, data in files_by_cat.items() %}
+<div style="margin-bottom:2rem;">
+  <h2 style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:.9rem;color:#c4b5fd;margin-bottom:.75rem;">
+    {{ data.label }} <span style="color:var(--mist);font-weight:400;">({{ data.files|length }} archivos)</span>
+  </h2>
+
+  {% if data.files %}
+  <div style="display:grid;gap:.75rem;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));">
+    {% for fname in data.files %}
+    {% set ext = fname.rsplit('.',1)[-1].lower() %}
+    <div class="card" style="overflow:hidden;">
+      {% if ext in ['mp4','webm','ogg'] %}
+      <video style="width:100%;height:100px;object-fit:cover;background:#000;" muted>
+        <source src="{{ url_for('static', filename='uploads/' ~ cat ~ '/' ~ fname) }}"/>
+      </video>
+      {% else %}
+      <img src="{{ url_for('static', filename='uploads/' ~ cat ~ '/' ~ fname) }}"
+        alt="{{ fname }}" style="width:100%;height:100px;object-fit:cover;"
+        onerror="this.style.background='#1a1a2e';this.alt='Error';"/>
+      {% endif %}
+      <div style="padding:.6rem;">
+        <p style="font-size:.7rem;color:var(--mist);word-break:break-all;margin-bottom:.35rem;">{{ fname[:30] }}{% if fname|length > 30 %}…{% endif %}</p>
+        <div class="flex gap-1 flex-wrap">
+          <a href="{{ url_for('static', filename='uploads/' ~ cat ~ '/' ~ fname) }}" target="_blank" class="btn btn-secondary btn-sm" style="font-size:.65rem;padding:.2rem .5rem;">👁</a>
+          <form method="POST" action="{{ url_for('admin_eliminar_upload') }}" onsubmit="return confirm('¿Eliminar {{ fname }}?');">
+            <input type="hidden" name="subfolder" value="{{ cat }}"/>
+            <input type="hidden" name="filename" value="{{ fname }}"/>
+            <button type="submit" class="btn btn-danger btn-sm" style="font-size:.65rem;padding:.2rem .5rem;">🗑</button>
+          </form>
+        </div>
+        <p style="font-size:.65rem;color:rgba(148,163,184,.5);margin-top:.25rem;">
+          /static/uploads/{{ cat }}/{{ fname[:20] }}…
+        </p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p style="color:var(--mist);font-size:.85rem;padding:.75rem 0;">No hay archivos en esta categoría.</p>
+  {% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}

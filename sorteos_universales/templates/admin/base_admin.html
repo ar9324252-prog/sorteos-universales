@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-section">Panel Admin</div>
+    <a href="{{ url_for('admin_dashboard') }}" class="sidebar-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">📊 Dashboard</a>
+    <div class="sidebar-section" style="margin-top:.5rem;">Eventos</div>
+    <a href="{{ url_for('admin_eventos') }}" class="sidebar-link {% if request.endpoint in ['admin_eventos','admin_editar_evento'] %}active{% endif %}">📋 Gestionar</a>
+    <a href="{{ url_for('admin_nuevo_evento') }}" class="sidebar-link {% if request.endpoint == 'admin_nuevo_evento' %}active{% endif %}">➕ Crear Evento</a>
+    <div class="sidebar-section" style="margin-top:.5rem;">Plataforma</div>
+    <a href="{{ url_for('admin_usuarios') }}" class="sidebar-link {% if request.endpoint == 'admin_usuarios' %}active{% endif %}">👥 Usuarios</a>
+    <a href="{{ url_for('admin_contacto') }}" class="sidebar-link {% if request.endpoint == 'admin_contacto' %}active{% endif %}">📞 Contacto</a>
+    <a href="{{ url_for('admin_uploads') }}" class="sidebar-link {% if request.endpoint in ['admin_uploads'] %}active{% endif %}">🗄 Almacén</a>
+    <div style="margin-top:auto;border-top:1px solid var(--border);padding-top:.5rem;">
+      <a href="{{ url_for('index') }}" class="sidebar-link">← Ver Sitio</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    {% block admin_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}
