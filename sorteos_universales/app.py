@@ -494,8 +494,8 @@ def seed_data():
         db.session.commit()
     if ContactInfo.query.count() == 0:
         db.session.add(ContactInfo(
-            phone='+591 70000000', address='Av. Universo 404, Galaxia Norte, Santa Cruz',
-            email='hola@sorteos-universales.com', schedule='Lun – Vie: 8:00 AM – 6:00 PM',
+            phone='+591 78780260', address='Av.intenacional, plan3000, Santa Cruz',
+            email='peperibas06@gmail.com', schedule='Lun – Vie: 8:00 AM – 00:00 PM',
             video_url='https://www.youtube.com/embed/0DJNteTwOZk',
             gallery_json='https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=600,https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=600,https://images.unsplash.com/photo-1614642264762-d0a3b8bf3700?w=600,https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600'
         ))
