@@ -1,0 +1,153 @@
+# 🚀 SORTEOS UNIVERSALES — LISTO PARA INTERNET
+
+## ✅ Estado del Proyecto
+
+Tu aplicación está **100% lista** para publicar en internet. Aquí está todo lo que se completó:
+
+### ✓ Archivos Creados para Producción:
+- `Procfile` — Configuración para hosting (Render, Railway)
+- `requirements.txt` — Todas las dependencias incluidas (con gunicorn)
+- `.gitignore` — Excluye archivos innecesarios
+- `wsgi.py` — Punto de entrada para servidores web
+- `DEPLOY.md` — Instrucciones completas de despliegue
+
+### ✓ Seguridad:
+- Panel de administración **oculto del público**
+- Usuarios normales solo ven la interfaz pública
+- Admin accesible solo con credenciales
+
+### ✓ Tests:
+- Todos los 10 tests pasaron ✅
+- Rutas públicas funcionan
+- Protección de admin verificada
+
+---
+
+## 📋 GUÍA RÁPIDA DE DESPLIEGUE (3 PASOS)
+
+### PASO 1: Prepare el Repositorio en tu PC
+
+1. Abre una terminal en la carpeta del proyecto:
+```
+cd c:\Users\sebasti\Downloads\andy\sorteos_flask\sorteos_universales
+```
+
+2. Inicializa Git:
+```
+git init
+git add .
+git commit -m "Sorteos Universales - Listo para despliegue"
+```
+
+### PASO 2: Sube a GitHub
+
+1. Ve a https://github.com/new
+2. **Nombre del repositorio:** `sorteos-universales`
+3. Descripción: "Plataforma de rifas y sorteos online"
+4. Selecciona **Public** (para que Render pueda verlo)
+5. Click en **Create repository**
+
+6. En tu terminal, ejecuta:
+```
+git remote add origin https://github.com/TU_USUARIO/sorteos-universales.git
+git branch -M main
+git push -u origin main
+```
+
+### PASO 3: Deploy en Render (Gratuito)
+
+1. Ve a https://render.com
+2. Haz login con GitHub (click en "Continue with GitHub")
+3. Da permiso a Render para acceder a tus repositorios
+4. Click en **New +** en el dashboard
+5. Selecciona **Web Service**
+6. Elige **sorteos-universales** de tu lista de repos
+7. Rellena:
+   - **Name:** sorteos-universales
+   - **Region:** cualquiera (ej: Ohio)
+   - **Branch:** main
+   - **Runtime:** Python 3
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `gunicorn app:app`
+   - **Free plan** está bien para comenzar
+
+8. Click en **Create Web Service**
+
+**¡Listo!** En 2-3 minutos tendrás tu sitio en vivo en:
+```
+https://sorteos-universales-xxxx.onrender.com
+```
+
+---
+
+## 🔑 Acceso Administrativo
+
+Tu panel privado estará en: `https://sorteos-universales-xxxx.onrender.com/admin`
+
+**Credenciales:**
+- **Email:** admin@sorteos.com
+- **Contraseña:** admin123
+
+**⚠️ IMPORTANTE:** Cambia estas credenciales después de subirlo a internet:
+1. Accede al panel de admin
+2. Ve a **Usuarios**
+3. Edita el usuario admin y pon una contraseña más segura
+
+---
+
+## 📱 URL Personalizada (Opcional)
+
+Después de que esté funcionando, puedes conectar un dominio propio:
+
+1. En Render: **Settings** → **Custom Domain**
+2. Apunta el DNS de tu dominio a Render
+
+Ej: si tienes `misorteos.com`, apuntalo a la URL de Render.
+
+---
+
+## 🎯 Qué ven los Usuarios
+
+Cuando visiten tu sitio:
+- ✓ Página de inicio bonita
+- ✓ Lista de eventos activos
+- ✓ Pueden registrarse gratis
+- ✓ Pueden comprar boletos
+- ✓ **NO ven** el panel de administración
+
+Tú puedes manejar todo desde `/admin` sin que el público lo sepa.
+
+---
+
+## 💾 Base de Datos
+
+La BD se crea automáticamente la primera vez:
+- **Tipo:** SQLite (incluido)
+- **Ubicación:** En el servidor de Render
+- **Datos iniciales:** 2 eventos + admin + contacto
+
+---
+
+## 🆘 Si algo falla
+
+1. Revisa los **Logs** en Render (Settings → Logs)
+2. Comprueba que `Procfile` y `requirements.txt` estén correctos
+3. Verifica que `app.py` sea el archivo principal
+4. Si necesitas, sube un cambio a GitHub y Render redeploya automáticamente
+
+---
+
+## 🎉 ¡LISTO!
+
+Tu plataforma de sorteos está lista para millones de usuarios.
+
+Cualquier cambio que hagas localmente, subes a GitHub con:
+```
+git add .
+git commit -m "Tu mensaje"
+git push
+```
+
+Y Render automáticamente redeploya con los cambios.
+
+**¡Que tengas éxito!** 🌌

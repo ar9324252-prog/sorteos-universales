@@ -1,0 +1,81 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Dashboard — Admin{% endblock %}
+{% block admin_content %}
+
+<h1 style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.3rem;color:#c4b5fd;margin-bottom:1.5rem;">📊 Dashboard</h1>
+
+<!-- STATS -->
+<div style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));margin-bottom:2rem;">
+  {% for ico, val, label, color in [
+    ('🎪', total_events, 'Total Eventos', '#c4b5fd'),
+    ('✅', active_events, 'Eventos Activos', '#6ee7b7'),
+    ('🎫', total_tickets, 'Boletos Vendidos', '#22d3ee'),
+    ('👥', total_users, 'Usuarios Registrados', '#fde68a')
+  ] %}
+  <div class="card p-6 text-center">
+    <div style="font-size:1.75rem;margin-bottom:.35rem;">{{ ico }}</div>
+    <div style="font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;color:{{ color }};">{{ val }}</div>
+    <p style="color:var(--mist);font-size:.8rem;margin-top:.2rem;">{{ label }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- EVENTOS TABLE -->
+<div style="margin-bottom:2rem;">
+  <div class="flex justify-between items-center mb-3 flex-wrap gap-2">
+    <h2 style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:.95rem;color:#c4b5fd;">Eventos Recientes</h2>
+    <a href="{{ url_for('admin_nuevo_evento') }}" class="btn btn-primary btn-sm">+ Nuevo Evento</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Evento</th><th>Estado</th><th>Vendidos</th><th>Precio</th><th>Cierre</th><th>Acciones</th></tr></thead>
+      <tbody>
+        {% for evt in events[:10] %}
+        <tr>
+          <td style="max-width:220px;"><strong style="color:var(--text);">{{ evt.title[:45] }}{% if evt.title|length > 45 %}…{% endif %}</strong></td>
+          <td>
+            {% if evt.status == 'active' and evt.end_date > now %}<span class="badge badge-active">Activo</span>
+            {% elif evt.status == 'finished' %}<span class="badge badge-winner">Finalizado</span>
+            {% else %}<span class="badge badge-expired">Expirado</span>{% endif %}
+          </td>
+          <td style="color:#c4b5fd;">{{ evt.sold_count }}/{{ evt.total_tickets }}</td>
+          <td style="color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:.82rem;">${{ "%.0f"|format(evt.ticket_price) }}</td>
+          <td style="color:var(--mist);font-size:.8rem;">{{ evt.end_date.strftime('%d/%m/%Y') }}</td>
+          <td>
+            <div class="flex gap-1 flex-wrap">
+              <a href="{{ url_for('evento_detalle', event_id=evt.id) }}" class="btn btn-secondary btn-sm">👁</a>
+              <a href="{{ url_for('admin_editar_evento', event_id=evt.id) }}" class="btn btn-secondary btn-sm">✏️</a>
+              <a href="{{ url_for('admin_compradores', event_id=evt.id) }}" class="btn btn-secondary btn-sm">🎫</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- RECENT TICKETS -->
+<div>
+  <h2 style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:.95rem;color:#c4b5fd;margin-bottom:.75rem;">Últimas Compras</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Comprador</th><th>Evento</th><th>Boleto</th><th>Referencia</th><th>Fecha</th></tr></thead>
+      <tbody>
+        {% for t in recent_tickets %}
+        <tr>
+          <td><strong style="color:var(--text);">{{ t.buyer_name }}</strong><br/><span style="color:var(--mist);font-size:.75rem;">{{ t.buyer_email }}</span></td>
+          <td style="color:var(--mist);font-size:.82rem;max-width:180px;">{{ t.event.title[:35] }}{% if t.event.title|length > 35 %}…{% endif %}</td>
+          <td style="font-family:'Space Mono',monospace;color:var(--cyan);">#{{ "%03d"|format(t.ticket_number) }}</td>
+          <td style="color:var(--mist);font-size:.8rem;">{{ t.pay_ref or '—' }}</td>
+          <td style="color:var(--mist);font-size:.78rem;">{{ t.purchased_at.strftime('%d/%m/%Y %H:%M') }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center;color:var(--mist);padding:2rem;">Sin compras aún.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
